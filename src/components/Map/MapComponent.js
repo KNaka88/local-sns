@@ -6,8 +6,8 @@ class MapComponent extends Component {
         super(props);
         this.state = { 
             userLocation: {
-                lat: 45.518,
-                lng: -122.680 
+                lat: null,
+                lng: null 
             }
         }
         this.setCurrentLocation = this.setCurrentLocation.bind(this);
