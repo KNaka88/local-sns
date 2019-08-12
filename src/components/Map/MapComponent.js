@@ -1,14 +1,15 @@
 import React, { Component } from 'react';
-import { Map, GoogleApiWrapper } from 'google-maps-react';
+import GoogleMapReact from 'google-map-react';
 
 class MapComponent extends Component {
     constructor(props) {
         super(props);
         this.state = { 
-            userLocation: {
+            center: {
                 lat: null,
                 lng: null 
-            }
+            },
+            zoom: 14
         }
         this.setCurrentLocation = this.setCurrentLocation.bind(this);
     }
@@ -18,34 +19,33 @@ class MapComponent extends Component {
     }
 
     render() {
-        const {lat, lng } = this.state.userLocation; 
         return(
-            <Map
-                google={this.props.google}
-                zoom={8}
-                style={ {width: '100%', height: '100%' }}
-                center={{ lat, lng }}
-            />
+            <div style={{ height: '100vh', width: '100%'}}>
+                <GoogleMapReact
+                    bootstrapURLKeys={{ key: process.env.REACT_APP_GOOGLE_MAP }}
+                    defaultCenter={this.state.center}
+                    defaultZoom={this.state.zoom}
+                >
+                </GoogleMapReact>
+            </div>
         );
     };
 
     setCurrentLocation() {
         if (navigator.geolocation) {
             navigator.geolocation.getCurrentPosition((position) => {
-                this.setState(() => ({
-                    userLocation: {
+                this.setState({
+                    center: {
                         lat: position.coords.latitude,
                         lng: position.coords.longitude,
-                    }
-                }));
+                    },
+                    zoom: 14
+                });
             });
         } else {
             console.log('not supported');
         }
     }
-
 }
 
-export default GoogleApiWrapper({
-    apiKey: process.env.REACT_APP_GOOGLE_MAP // This is for personal proeject. Do not pass secret key like this in Prod
-})(MapComponent);
+export default MapComponent;
