@@ -1,0 +1,19 @@
+{
+    "master": {
+        "awscloudformation": {
+            "AuthRoleName": "local-sns-master-20190811234633-authRole",
+            "UnauthRoleArn": "arn:aws:iam::185833818651:role/local-sns-master-20190811234633-unauthRole",
+            "AuthRoleArn": "arn:aws:iam::185833818651:role/local-sns-master-20190811234633-authRole",
+            "Region": "us-west-2",
+            "DeploymentBucketName": "local-sns-master-20190811234633-deployment",
+            "UnauthRoleName": "local-sns-master-20190811234633-unauthRole",
+            "StackName": "local-sns-master-20190811234633",
+            "StackId": "arn:aws:cloudformation:us-west-2:185833818651:stack/local-sns-master-20190811234633/ec3ea6f0-bccc-11e9-8fb0-0a7f77c1d258"
+        },
+        "categories": {
+            "auth": {
+                "localsns7af80fa7": {}
+            }
+        }
+    }
+}

@@ -1,0 +1,9 @@
+{
+	"auth": {
+		"localsns7af80fa7": {
+			"service": "Cognito",
+			"providerPlugin": "awscloudformation",
+			"dependsOn": []
+		}
+	}
+}
