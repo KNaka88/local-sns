@@ -3,6 +3,9 @@ import GoogleMapReact from 'google-map-react';
 import MarkerClusterer from '@google/markerclusterer';
 
 class MapComponent extends Component {
+    mapObject;
+    mapsObject;
+
     constructor(props) {
         super(props);
         this.state = { 
@@ -10,9 +13,15 @@ class MapComponent extends Component {
                 lat: null,
                 lng: null 
             },
-            zoom: 14
+            zoom: 14,
+            marker: null
         }
+
         this.setCurrentLocation = this.setCurrentLocation.bind(this);
+        this.onClick = this.onClick.bind(this);
+        this.toggleMarker = this.toggleMarker.bind(this);
+        this.addMarker = this.addMarker.bind(this);
+        this.removeMarker = this.removeMarker.bind(this);
     }
 
     componentDidMount() {
@@ -20,6 +29,8 @@ class MapComponent extends Component {
     }
 
     async handleApiLoaded(map, maps) {
+        this.mapObject = map;
+        this.mapsObject = maps;
         const google = window.google;
 
         // const communityLists = await getCommunityList(currentPosition, distance);
@@ -50,7 +61,7 @@ class MapComponent extends Component {
             { lat: -43.999792, lng: 170.463352 }
         ];
         var labels = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
-        var markers = communityLists.map(function (location, i) {
+        var markers = communityLists.map(function (location, i) {            
             return new google.maps.Marker({
                 position: location,
                 label: labels[i % labels.length],
@@ -61,7 +72,7 @@ class MapComponent extends Component {
         var markerCluster = new MarkerClusterer(map, markers,
             { imagePath: 'https://developers.google.com/maps/documentation/javascript/examples/markerclusterer/m' });
         
-
+        
         // const circle = new google.maps.Circle({
         //     strokeColor: "#FF0000",
         //     strokeOpacity: 0.8,
@@ -83,11 +94,46 @@ class MapComponent extends Component {
                     zoom={this.state.zoom}
                     yesIWantToUseGoogleMapApiInternals
                     onGoogleApiLoaded={({ map, maps}) => this.handleApiLoaded(map, maps)}
+                    onClick={this.onClick}
                 >
                 </GoogleMapReact>
             </div>
         );
     };
+
+    onClick({ x, y, lat, lng }) {
+        if (this.mapObject.getZoom() >= 16) {
+            this.toggleMarker(lat, lng);
+        } else {
+            if (this.state.marker) {
+                this.removeMarker();
+            }
+        }
+    }
+
+    toggleMarker(lat, lng) {
+        if (this.state.marker) {
+            this.removeMarker();
+        } else {
+            this.addMarker(lat, lng);
+        }
+    }
+
+    addMarker(lat, lng) {
+        const marker = new window.google.maps.Marker({
+            position: { lat, lng },
+            title: "hello world"
+        });
+
+        this.setState({ marker }, () => {
+            this.state.marker.setMap(this.mapObject);
+        });
+    }
+
+    removeMarker() {
+        this.state.marker.setMap(null);
+        this.setState({ marker: null });
+    }
 
     setCurrentLocation() {
         if (navigator.geolocation) {
