@@ -1,0 +1,57 @@
+type Team @model {
+  id: ID!
+  name: String!
+  description: String
+  coordinate: Coordinate!
+  radius: Int!
+  owner: Member!
+  members: [TeamMember] @connection(name: "MemberTeams")
+}
+
+input CreateTeamInput {
+	name: String!
+	description: String
+	coordinate: CoordinateInput!
+	radius: Int!
+}
+
+type TeamMember @model(queries: null) {
+  id: ID!
+  member: Member! @connection(name: "TeamMembers")
+  team: Team! @connection(name: "MemberTeams")
+}
+
+input CreateTeamMemberInput {
+	teamMemberMemberId: ID!
+	teamMemberTeamId: ID!
+}
+
+input CreateMemberInput {
+  name: String!
+  tier: Tier!
+}
+
+type Member @model {
+  id: ID!
+  name: String!
+  tier: Tier!
+  teams: [TeamMember] @connection(name: "TeamMembers")
+}
+
+type Coordinate {
+  latitude: Float!
+  longitude: Float!
+}
+
+input CoordinateInput {
+	latitude: Float!
+	longitude: Float!
+}
+
+enum Tier {
+  FREE
+  PREMIUM
+  BUSINESS
+  CORPORATE
+  ENTERPRISE
+}
